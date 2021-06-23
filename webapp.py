@@ -19,7 +19,6 @@ song_user_count.columns= ['user_id','song_id','listen_count']
 merged_df= pd.merge(song_user_count, songs_df2, on='song_id')
 
 pt_df= merged_df.pivot_table(values='listen_count',index='user_id',columns='title',fill_value=0)
-#st.write(pt_df)
 
 transpose= pt_df.values.T
 
@@ -27,20 +26,16 @@ SVD= TruncatedSVD(n_components= 20, random_state= 17)
 result_matrix= SVD.fit_transform(transpose)
 
 corelation_m= np.corrcoef(result_matrix)
-#st.write(corelation_m)
 
 songnames= pt_df.columns
 songlist= list (songnames)
-#st.write(songlist)
 
 st.header("Hey there!")
 st.subheader("Need some music recommendations based on songs you already love?")
 st.subheader("Enter a song below & we'll try our best to recommend you similar songs!")
 inp = st.text_input("")
-#st.write(inp)
 
 if st.button("Recommend"):
-    #st.write(songlist.index(inp))
     if (inp in songlist):
         st.write("*Here are the songs recommended for you:*")
         recsong = corelation_m[songlist.index(inp)]
